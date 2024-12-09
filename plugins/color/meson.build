@@ -1,5 +1,15 @@
 plugin_name='color'
 
+if get_option('generate_tz_coords') in ['standard', 'deprecated']
+    prog_python = find_program('python3')
+
+    tz_coords_cmd = [prog_python, 'generate-tz-header.py', get_option('zoneinfo_path')]
+    if get_option('generate_tz_coords') == 'deprecated'
+        tz_coords_cmd += '-d'
+    endif
+
+    run_command(tz_coords_cmd, check: true)
+endif
 
 built_sources = gnome.gdbus_codegen(
   'cinnamon-session-dbus',
